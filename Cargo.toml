@@ -1,0 +1,37 @@
+[package]
+name = "consenJolt"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = ["guest", "lib"]
+
+[workspace.dependencies]
+ethereum_ssz = "0.9.0"
+ream-consensus = { git = "https://github.com/ReamLabs/ream.git", package = "ream-consensus" }
+tracing = "0.1.40"
+
+[profile.release]
+debug = 1
+codegen-units = 1
+lto = "fat"
+
+[dependencies]
+jolt-sdk = { git = "https://github.com/a16z/jolt", features = ["host"] }
+guest = { path = "./guest" }
+ark-serialize = "0.5.0"
+tracing = { workspace = true }
+clap = { version = "4.0", features = ["derive", "env"] }
+derive_more = { version = "2.0.1", features = ["display"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+ethereum_ssz = { workspace = true }
+ream-consensus = { workspace = true }
+ream-lib = { path = "lib" }
+
+[features]
+icicle = ["jolt-sdk/icicle"]
+
+[patch.crates-io]
+ark-ff = { git = "https://github.com/a16z/arkworks-algebra", branch = "v0.5.0-optimize-mul-u64" }
+ark-ec = { git = "https://github.com/a16z/arkworks-algebra", branch = "v0.5.0-optimize-mul-u64" }
+ark-serialize = { git = "https://github.com/a16z/arkworks-algebra", branch = "v0.5.0-optimize-mul-u64" }

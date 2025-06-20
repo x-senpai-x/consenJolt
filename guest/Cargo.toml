@@ -1,0 +1,15 @@
+[package]
+name = "guest"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+guest = []
+
+[dependencies]
+jolt = { package = "jolt-sdk", git = "https://github.com/a16z/jolt" , features = ["guest-std"]}
+# ethereum_ssz = {workspace = true}
+ream-consensus = {workspace = true }
+ream-lib = { path = "../lib"}
+# arrayvec = { version = "0.7.6", default-features = false }
+getrandom = { version = "0.2", features = ["custom"] }
