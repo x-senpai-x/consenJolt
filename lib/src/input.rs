@@ -14,7 +14,8 @@ use ream_consensus::{
 use serde::{Deserialize, Serialize};
 use ssz_derive::{Decode, Encode};
 
-#[derive(Serialize, Deserialize, Clone, Debug, Encode, Decode)]
+#[derive(Serialize, Deserialize, Clone, Debug, Decode)]
+#[ssz(enum_behaviour = "transparent")]
 pub enum OperationInput {
     Attestation(Attestation),
     AttesterSlashing(AttesterSlashing),
