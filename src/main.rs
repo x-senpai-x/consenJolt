@@ -4,8 +4,8 @@ use tracing::{error, info};
 mod cli;
 use cli::operation::OperationName;
 use clap::Parser;
-use ream_lib::{file::read_file, input::OperationInput,ssz::to_ssz};
-use ream_consensus::electra::{beacon_block::SignedBeaconBlock, beacon_state::BeaconState};
+use ream_lib::{file::read_file, input::OperationInput};
+use ream_consensus::electra::beacon_state::BeaconState;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
@@ -57,35 +57,9 @@ pub fn main() {
 
         let case_dir = &base_dir.join(&test_case);
         let input_path = &case_dir.join(format!("{}.ssz_snappy", operation_name.to_input_name()));
-        let pre_state: BeaconState = read_file(&case_dir.join("pre.ssz_snappy"));
+        let pre_state: Vec<u8> = read_file(&case_dir.join("pre.ssz_snappy"));
+        let input: Vec<u8> = read_file(input_path);
 
-        // let pre_state: Vec<u8> = ssz_from_file(&case_dir.join("pre.ssz_snappy"));
-        let input = match operation_name {
-            OperationName::Attestation => OperationInput::Attestation(read_file(input_path)),
-            OperationName::AttesterSlashing => {
-                OperationInput::AttesterSlashing(read_file(input_path))
-            }
-            OperationName::BlockHeader => OperationInput::BeaconBlock(read_file(input_path)),
-            OperationName::BLSToExecutionChange => {
-                OperationInput::SignedBLSToExecutionChange(read_file(input_path))
-            }
-            OperationName::Deposit => OperationInput::Deposit(read_file(input_path)),
-            OperationName::ExecutionPayload => {
-                OperationInput::BeaconBlockBody(read_file(input_path))
-            }
-            OperationName::ProposerSlashing => {
-                OperationInput::ProposerSlashing(read_file(input_path))
-            }
-            OperationName::SyncAggregate => {
-                OperationInput::SyncAggregate(read_file(input_path))
-            }
-            OperationName::VoluntaryExit => {
-                OperationInput::SignedVoluntaryExit(read_file(input_path))
-            }
-            OperationName::Withdrawals => {
-                OperationInput::ExecutionPayload(read_file(input_path))
-            }
-        };
         let target_dir = "/tmp/jolt-guest-targets";
         let start = Instant::now();
         let program = guest::compile_state_transition(target_dir);
@@ -102,11 +76,11 @@ pub fn main() {
         let duration_config=end.duration_since(start);
         let verify_state_transition = guest::build_verifier_state_transition(verifier_preprocessing);
         let start=Instant::now();
-        let (output, proof) = prove_state_transition(pre_state.clone(),&input);
+        let (output, proof) = prove_state_transition(pre_state.clone(),input.clone());
         let end=Instant::now();
         let duration_proving=end.duration_since(start);
         
-        let is_valid = verify_state_transition(pre_state,&input, output, proof);
+        let is_valid = verify_state_transition(pre_state,input.clone(), output, proof);
 
         println!("output: {:?}",output);
         println!("valid: {is_valid}");

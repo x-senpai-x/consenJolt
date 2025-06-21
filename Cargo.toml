@@ -27,6 +27,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 ethereum_ssz = { workspace = true }
 ream-consensus = { workspace = true }
 ream-lib = { path = "lib" }
+ethereum_hashing = { git = "https://github.com/ReamLabs/ethereum_hashing.git" }
 
 [features]
 icicle = ["jolt-sdk/icicle"]
@@ -35,3 +36,5 @@ icicle = ["jolt-sdk/icicle"]
 ark-ff = { git = "https://github.com/a16z/arkworks-algebra", branch = "v0.5.0-optimize-mul-u64" }
 ark-ec = { git = "https://github.com/a16z/arkworks-algebra", branch = "v0.5.0-optimize-mul-u64" }
 ark-serialize = { git = "https://github.com/a16z/arkworks-algebra", branch = "v0.5.0-optimize-mul-u64" }
+ethereum_hashing = { git = "https://github.com/ReamLabs/ethereum_hashing.git" }
+ssz_types = { git = "https://github.com/ReamLabs/ssz_types", branch = "magic-extended-list" } # Extends 2^29 to 2^40 list root

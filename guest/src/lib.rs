@@ -3,7 +3,7 @@
 use ream_consensus::{
     electra::beacon_state::BeaconState
 };
-use ream_lib::input::OperationInput;
+use ream_lib::{input::OperationInput, ssz::to_ssz};
 use getrandom::register_custom_getrandom;
 
 fn custom_getrandom(buf: &mut [u8]) -> Result<(), getrandom::Error> {
@@ -14,8 +14,9 @@ fn custom_getrandom(buf: &mut [u8]) -> Result<(), getrandom::Error> {
 register_custom_getrandom!(custom_getrandom);
 
 #[jolt::provable]
-fn state_transition(pre_state:BeaconState,input:&OperationInput){
-    // let pre_state:BeaconState=deserialize(&prestate).expect("");
+fn state_transition(pre_state_bytes: Vec<u8>, input_bytes: Vec<u8>){
+    let pre_state: BeaconState = to_ssz(&pre_state_bytes).expect("pre-state deserialize failed");
+    let input: OperationInput = to_ssz(&input_bytes).expect("input deserialize failed");
     match input {
         //input enum destructured 
         OperationInput::Attestation(attestation) => {

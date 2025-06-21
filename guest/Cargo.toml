@@ -9,7 +9,8 @@ guest = []
 [dependencies]
 jolt = { package = "jolt-sdk", git = "https://github.com/a16z/jolt" , features = ["guest-std"]}
 # ethereum_ssz = {workspace = true}
-ream-consensus = {workspace = true }
+ream-consensus = { workspace = true, features = ["zkvm"] }
 ream-lib = { path = "../lib"}
 # arrayvec = { version = "0.7.6", default-features = false }
 getrandom = { version = "0.2", features = ["custom"] }
+ethereum_hashing = { git = "https://github.com/ReamLabs/ethereum_hashing.git" }

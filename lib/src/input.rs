@@ -12,8 +12,9 @@ use ream_consensus::{
     voluntary_exit::SignedVoluntaryExit,
 };
 use serde::{Deserialize, Serialize};
+use ssz_derive::{Decode, Encode};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Encode, Decode)]
 pub enum OperationInput {
     Attestation(Attestation),
     AttesterSlashing(AttesterSlashing),
