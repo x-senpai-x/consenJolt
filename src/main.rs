@@ -59,7 +59,9 @@ pub fn main() {
         let input_path = &case_dir.join(format!("{}.ssz_snappy", operation_name.to_input_name()));
         let pre_state: Vec<u8> = read_file(&case_dir.join("pre.ssz_snappy"));
         let input: Vec<u8> = read_file(input_path);
-
+        println!("pre_state size: {}", pre_state.len());
+        println!("input size: {}", input.len());
+        println!("total input size: {}", pre_state.len() + input.len());
         let target_dir = "/tmp/jolt-guest-targets";
         let start = Instant::now();
         let program = guest::compile_state_transition(target_dir);
