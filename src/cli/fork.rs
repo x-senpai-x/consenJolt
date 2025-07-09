@@ -10,11 +10,10 @@ pub struct ForkArgs {
 #[derive(ValueEnum, Debug, Clone, Default, Display)]
 #[clap(rename_all = "lowercase")]
 pub enum Fork {
-
     #[default]
     #[display("electra")]
     Electra,
-    
-    #[display("deneb")]
-    Deneb,
+
+    #[display("fulu")]
+    Fulu,
 }
